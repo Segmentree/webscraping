@@ -10,7 +10,6 @@ URL = 'https://www.korea.net/TalkTalkKorea/English/winners/WIN0000000468'
 OPTIONS = ['--ignore-certificate-errors', '--incognito',
            '--disable-dev-shm-usage', '--no-sandbox', '--headless']
 # OPTIONS = ['--ignore-certificate-errors', '--incognito']
-
 count = 0
 
 
@@ -27,9 +26,9 @@ def email_generator():
 
 
 def add_vote(url=URL):
-    global count
     NAME = name_generator()
     EMAIL = email_generator()
+    global count
     try:
         options = webdriver.ChromeOptions()
         # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -66,6 +65,8 @@ def add_vote(url=URL):
 
 
 def engine(iteration_size, url=URL):
+    global count
+    count = 0
     for i in range(0, iteration_size):
         add_vote(url)
-    print(f'End proccess { count }')
+    return iteration_size, count

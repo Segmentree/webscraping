@@ -9,7 +9,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-USERNAME = range(2)
+VOTE, CYCLES = range(2)
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -26,13 +26,23 @@ def help(update, context):
 
 def vote(update, context):
     """Vote with a custom user"""
-    update.message.reply_text('Enter a username')
-    return USERNAME
+    update.message.reply_text('Enter a number of cycles')
+    return CYCLES
 
 
-def save_username(update, context):
-    update.message.reply_text(
-        f'You have selected {update.message.text} as user name')
+def start_vote_proccess(update, context):
+    try:
+        size = int(update.message.text)
+        update.message.reply_text(
+            f'A cycle of {size} iterations is running now please wait to finish to use again the /vote command')
+        total, succes = vote_lib.engine(size)
+        update.message.reply_text(
+            f'There was {succes} succes votes of a total of {total}')
+    except:
+        update.message.reply_text(
+            'There was an error please check if the input is a valid number')
+    update.message.replt_text('The process has finished successfully')
+    return VOTE
 
 
 def echo(update, context):
@@ -64,7 +74,8 @@ def main():
             entry_points=[CommandHandler("vote", vote)],
             fallbacks=[],
             states={
-                USERNAME: [MessageHandler(Filters.text, save_username)]
+                CYCLES: [MessageHandler(Filters.text, start_vote_proccess)],
+                VOTE: [CommandHandler("vote", vote)]
             }
         )
     )
