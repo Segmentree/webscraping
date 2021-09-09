@@ -32,12 +32,12 @@ def add_vote(url=URL):
     EMAIL = email_generator()
     try:
         options = webdriver.ChromeOptions()
-        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         for opt in OPTIONS:
             options.add_argument(opt)
-        driver = webdriver.Chrome(executable_path=os.environ.get(
-            "CHROMEDRIVER_PATH"), options=options)
-        # driver = webdriver.Chrome(options=options)
+        # driver = webdriver.Chrome(executable_path=os.environ.get(
+        #     "CHROMEDRIVER_PATH"), options=options)
+        driver = webdriver.Chrome(options=options)
         driver.get(url)
         accept = driver.find_element_by_class_name('co-btn--danger')
         accept.click()
@@ -65,8 +65,7 @@ def add_vote(url=URL):
         print('Fail')
 
 
-for i in range(1, 301):
-    add_vote()
-    print(f'cycle : {i}')
-
-print(f'End proccess { count }')
+def engine(iteration_size, url=URL):
+    for i in range(0, iteration_size):
+        add_vote(url)
+    print(f'End proccess { count }')
