@@ -65,7 +65,7 @@ def add_vote(url=URL):
         print('Fail')
 
 
-for i in range(1, 11):
+for i in range(1, 301):
     add_vote()
     print(f'cycle : {i}')
 
