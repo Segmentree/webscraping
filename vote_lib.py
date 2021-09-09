@@ -9,8 +9,13 @@ import os
 URL = 'https://www.korea.net/TalkTalkKorea/English/winners/WIN0000000468'
 OPTIONS = ['--ignore-certificate-errors', '--incognito',
            '--disable-dev-shm-usage', '--no-sandbox', '--headless']
-# OPTIONS = ['--ignore-certificate-errors', '--incognito']
+# OPTIONS = ['--ignore-certificate-errors', '--incognito',
+#            '--disable-dev-shm-usage', '--no-sandbox']
 count = 0
+
+
+def standard_print(string_to_print):
+    print(string_to_print)
 
 
 def name_generator():
@@ -25,7 +30,7 @@ def email_generator():
     return word_generator(12) + '@' + word_generator(12) + '.com'
 
 
-def add_vote(url=URL):
+def add_vote(print_fun, cycle, url=URL, sleep_time=0):
     NAME = name_generator()
     EMAIL = email_generator()
     global count
@@ -57,16 +62,18 @@ def add_vote(url=URL):
         # confirm.click()
         if success.text != 'Thank you for participating in the voting event!!':
             raise ValueError("Doesn't match")
-        print('Success : ', success.text)
+        print_fun(
+            f'Cycle: {cycle} - Success the server respond with {success.text}')
         count += 1
+        time.sleep(sleep_time)
         driver.close()
     except:
-        print('Fail')
+        print_fun(f'Cycle: {cycle} - Fail :(')
 
 
-def engine(iteration_size, url=URL):
+def engine(iteration_size, print_fun=standard_print, sleep_time=0, url=URL):
     global count
     count = 0
     for i in range(0, iteration_size):
-        add_vote(url)
+        add_vote(print_fun, url, sleep_time)
     return iteration_size, count

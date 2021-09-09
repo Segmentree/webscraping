@@ -9,7 +9,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-VOTE, CYCLES = range(2)
+VOTE, CYCLES, SLEEP = range(3)
+size = 0
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -25,23 +26,39 @@ def help(update, context):
 
 
 def vote(update, context):
+    global size
+    size = 0
     """Vote with a custom user"""
     update.message.reply_text('Enter a number of cycles')
-    return CYCLES
+    return SLEEP
+
+
+def sleep_time(update, context):
+    global size
+    try:
+        size = int(update.message.text)
+        update.message.reply_text(
+            'Enter an interval in seconds ex: 120 [means that a vote will occur every two minutes]')
+        return CYCLES
+    except:
+        update.message.reply_text(
+            'There was an error please check if the input is a valid number')
+        return VOTE
 
 
 def start_vote_proccess(update, context):
     try:
-        size = int(update.message.text)
+        interval = int(update.message.text)
         update.message.reply_text(
-            f'A cycle of {size} iterations is running now please wait to finish to use again the /vote command')
-        total, succes = vote_lib.engine(size)
+            f'A cycle of {size} iterations and an interval {interval} is running now please wait to finish to use again the /vote command')
+        total, succes = vote_lib.engine(size,
+                                        update.message.reply_text, interval)
         update.message.reply_text(
             f'There was {succes} succes votes of a total of {total}')
+        update.message.reply_text('The process has finished successfully')
     except:
         update.message.reply_text(
             'There was an error please check if the input is a valid number')
-    update.message.replt_text('The process has finished successfully')
     return VOTE
 
 
@@ -75,7 +92,8 @@ def main():
             fallbacks=[],
             states={
                 CYCLES: [MessageHandler(Filters.text, start_vote_proccess)],
-                VOTE: [CommandHandler("vote", vote)]
+                VOTE: [CommandHandler("vote", vote)],
+                SLEEP: [MessageHandler(Filters.text, sleep_time)]
             }
         )
     )
