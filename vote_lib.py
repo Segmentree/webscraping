@@ -63,7 +63,7 @@ def add_vote(print_fun, cycle, url=URL, sleep_time=0):
         if success.text != 'Thank you for participating in the voting event!!':
             raise ValueError("Doesn't match")
         print_fun(
-            f'Cycle: {cycle} - Success the server respond with {success.text}')
+            f'Cycle: {cycle} - Success the server respond with "{success.text}"')
         count += 1
         time.sleep(sleep_time)
         driver.close()
@@ -75,5 +75,5 @@ def engine(iteration_size, print_fun=standard_print, sleep_time=0, url=URL):
     global count
     count = 0
     for i in range(0, iteration_size):
-        add_vote(print_fun, url, sleep_time)
+        add_vote(print_fun, i, url, sleep_time)
     return iteration_size, count
