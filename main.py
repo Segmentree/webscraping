@@ -10,7 +10,7 @@ URL = 'https://www.korea.net/TalkTalkKorea/English/winners/WIN0000000468'
 OPTIONS = ['--ignore-certificate-errors', '--incognito',
            '--disable-dev-shm-usage', '--no-sandbox', '--headless']
 # OPTIONS = ['--ignore-certificate-errors', '--incognito']
-# Test Heroku Deploy
+
 count = 0
 
 
@@ -65,7 +65,7 @@ def add_vote(url=URL):
         print('Fail')
 
 
-for i in range(1, 2):
+for i in range(1, 11):
     add_vote()
     print(f'cycle : {i}')
 
