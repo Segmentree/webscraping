@@ -31,9 +31,12 @@ def add_vote(url=URL):
     EMAIL = email_generator()
     try:
         options = webdriver.ChromeOptions()
+        options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         for opt in OPTIONS:
             options.add_argument(opt)
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(executable_path=os.environ.get(
+            "CHROMEDRIVER_PATH"), options=options)
+        # driver = webdriver.Chrome(options=options)
         driver.get(url)
         accept = driver.find_element_by_class_name('co-btn--danger')
         accept.click()
