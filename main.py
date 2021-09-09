@@ -4,9 +4,11 @@ from random import choice
 from string import ascii_lowercase
 import time
 import names
+import os
 
 URL = 'https://www.korea.net/TalkTalkKorea/English/winners/WIN0000000468'
-OPTIONS = ['--ignore-certificate-errors', '--incognito', '--headless']
+OPTIONS = ['--ignore-certificate-errors', '--incognito',
+           '--disable-dev-shm-usage', '--no-sandbox', '--headless']
 # OPTIONS = ['--ignore-certificate-errors', '--incognito']
 count = 0
 
@@ -59,7 +61,7 @@ def add_vote(url=URL):
         print('Fail')
 
 
-for i in range(1, 2000):
+for i in range(1, 2):
     add_vote()
     print(f'cycle : {i}')
 
