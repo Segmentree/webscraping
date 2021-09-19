@@ -1,35 +1,25 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from random import choice
-from string import ascii_lowercase
+import random
 import time
-import names
-import os
+from faker import Faker
+fake = Faker()
 
 URL = 'https://www.korea.net/TalkTalkKorea/English/winners/WIN0000000468'
 OPTIONS = ['--ignore-certificate-errors', '--incognito',
            '--disable-dev-shm-usage', '--no-sandbox', '--headless']
 # OPTIONS = ['--ignore-certificate-errors', '--incognito']
+HALF_HOUR = 60*30
 
 count = 0
 
 
-def name_generator():
-    return names.get_full_name()
-
-
-def word_generator(n):
-    return ''.join(choice(ascii_lowercase) for i in range(n))
-
-
-def email_generator():
-    return word_generator(12) + '@' + word_generator(12) + '.com'
-
-
 def add_vote(url=URL):
     global count
-    NAME = name_generator()
-    EMAIL = email_generator()
+    NAME = fake.name()
+    EMAIL = fake.email()
+    SLEEP = random.randrange(1, HALF_HOUR)
+    print(NAME, EMAIL, SLEEP)
     try:
         options = webdriver.ChromeOptions()
         # options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -61,6 +51,7 @@ def add_vote(url=URL):
         print('Success : ', success.text)
         count += 1
         driver.close()
+        time.sleep(SLEEP)
     except:
         print('Fail')
 
@@ -68,4 +59,8 @@ def add_vote(url=URL):
 def engine(iteration_size, url=URL):
     for i in range(0, iteration_size):
         add_vote(url)
+        print('Cycle : ', i)
     print(f'End proccess { count }')
+
+
+engine(6*10**3)
