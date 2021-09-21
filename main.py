@@ -9,7 +9,7 @@ URL = 'https://www.korea.net/TalkTalkKorea/English/winners/WIN0000000468'
 OPTIONS = ['--ignore-certificate-errors', '--incognito',
            '--disable-dev-shm-usage', '--no-sandbox', '--headless']
 # OPTIONS = ['--ignore-certificate-errors', '--incognito']
-HALF_HOUR = 60*30
+TEN_MINUTES = 60*10
 
 count = 0
 
@@ -18,7 +18,7 @@ def add_vote(url=URL):
     global count
     NAME = fake.name()
     EMAIL = fake.email()
-    SLEEP = random.randrange(1, HALF_HOUR)
+    SLEEP = random.randrange(1, TEN_MINUTES)
     print(NAME, EMAIL, SLEEP)
     try:
         options = webdriver.ChromeOptions()
